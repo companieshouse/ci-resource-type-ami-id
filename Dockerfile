@@ -9,4 +9,4 @@ COPY requirements.yml /requirements.yml
 RUN python3 -m pip install --no-cache-dir -r /requirements.yml && \
     rm /requirements.yml
 
-ADD assets/ /opt/resource/
+COPY assets/ /opt/resource/
