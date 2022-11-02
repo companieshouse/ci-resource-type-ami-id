@@ -6,6 +6,7 @@ import json
 import re
 import sys
 from packaging import version as semver
+from distutils.version import StrictVersion
 
 DEFAULT_AWS_REGION = "eu-west-2"
 DEFAULT_VER_REGEX = "(\d{1,3}\.\d{1,3}\.\d{1,3})$"
@@ -82,7 +83,7 @@ def return_versions(payload):
                 else:
                     ami_list.append(ami_version)
 
-        ami_list.sort()
+        ami_list.sort(key=StrictVersion)
         if "version" not in payload.keys():
             ami_latest = ami_list.pop()
             ami_list = [ami_latest]
