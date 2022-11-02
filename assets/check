@@ -96,7 +96,7 @@ def return_versions(payload):
 
     else:
         ec2_client.close()
-        sys.atderr.write("\nReceived {} error from AWS\n".format(
+        sys.stderr.write("\nReceived {} error from AWS\n".format(
             response["ResponseMetadata"]["HTTPStatusCode"]
         ))
         sys.exit(1)
