@@ -18,14 +18,17 @@ REQ_PARAMS = [
     "version_regex"
 ]
 
-
-def validate_source(payload):
+def set_source_defaults(payload):
     if "aws_region" not in payload['source'].keys():
         payload['source'].update({"aws_region": DEFAULT_AWS_REGION})
 
     if "version_regex" not in payload["source"].keys():
         payload["source"].update({"version_regex": DEFAULT_VER_REGEX})
 
+    return payload
+
+
+def validate_source(payload):
     for param in REQ_PARAMS:
         if param not in payload['source'].keys():
             sys.stderr.write("\nRequired parameter {} not defined\n".format(param))
@@ -104,5 +107,7 @@ def return_versions(payload):
 
 
 if __name__ == "__main__":
-    payload = validate_source(json.load(sys.stdin))
+    payload = json.load(sys.stdin)
+    payload = set_source_defaults(payload)
+    payload = validate_source(payload)
     sys.stdout.write(json.dumps(return_versions(payload), indent=2))
