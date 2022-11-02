@@ -12,22 +12,30 @@ REQ_PARAMS = [
     "aws_access_key_id",
     "aws_secret_access_key",
     "aws_region",
+    "ami_owner_ids",
     "ami_prefix",
 ]
 
 
 def set_source_defaults(payload):
-    if "aws_region" not in payload['source'].keys():
-        payload['source'].update({"aws_region": DEFAULT_AWS_REGION})
+    if "aws_region" not in payload["source"].keys():
+        payload["source"].update({"aws_region": DEFAULT_AWS_REGION})
+
+    if "ami_owner_ids" not in payload["source"].keys():
+        payload["source"].update({"ami_owner_ids": ["self"]})
 
     return payload
 
 
 def validate_source(payload):
     for param in REQ_PARAMS:
-        if param not in payload['source'].keys():
+        if param not in payload["source"].keys():
             sys.stderr.write("\nRequired parameter {} not defined\n".format(param))
             sys.exit(1)
+
+    if type(payload["source"]["ami_owner_ids"]) is not list:
+        sys.stderr.write("\nami_owner_ids must be a list\n")
+        sys.exit(1)
 
     return payload
 
@@ -42,7 +50,7 @@ def write_output_file(ami_id, dir=OUTPUT_DIR, file="ami-id"):
             sys.exit(1)
 
     output_file = dir + "/" + file
-    with open(output_file, 'w') as f:
+    with open(output_file, "w") as f:
         f.write(ami_id)
     f.close()
 
@@ -50,23 +58,23 @@ def write_output_file(ami_id, dir=OUTPUT_DIR, file="ami-id"):
 def get_ami_data(payload):
     try:
         session = boto3.Session(
-            aws_access_key_id=payload['source']['aws_access_key_id'],
-            aws_secret_access_key=payload['source']['aws_secret_access_key'],
-            region_name=payload['source']['aws_region']
+            aws_access_key_id=payload["source"]["aws_access_key_id"],
+            aws_secret_access_key=payload["source"]["aws_secret_access_key"],
+            region_name=payload["source"]["aws_region"]
         )
         ec2_client = session.client(
             "ec2",
-            payload['source']['aws_region']
+            payload["source"]["aws_region"]
         )
 
         response = ec2_client.describe_images(
             Filters=[
                 {
-                    'Name': 'name',
-                    'Values': [payload['source']['ami_prefix'] + payload["version"]["version"]]
+                    "Name": "name",
+                    "Values": [payload["source"]["ami_prefix"] + payload["version"]["version"]]
                 },
             ],
-            Owners=['self']
+            Owners=payload["source"]["ami_owner_ids"]
         )
     except botocore.exceptions.ClientError as err:
         sys.stderr.write(
@@ -79,7 +87,7 @@ def get_ami_data(payload):
             ec2_client.close()
             sys.stderr.write(
                 "Could not find AMI: {}{}".format(
-                    payload['source']['ami_prefix'], payload["version"]["version"]
+                    payload["source"]["ami_prefix"], payload["version"]["version"]
                 )
             )
             sys.exit(1)
@@ -87,7 +95,7 @@ def get_ami_data(payload):
             ec2_client.close()
             sys.stderr.write(
                 "Multiple AMIs found with name: {}{}".format(
-                    payload['source']['ami_prefix'], payload["version"]["version"]
+                    payload["source"]["ami_prefix"], payload["version"]["version"]
                 )
             )
             sys.exit(1)

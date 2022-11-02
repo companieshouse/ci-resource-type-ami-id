@@ -22,6 +22,7 @@ resource_types:
 * `aws_access_key_id`: *Required.* The AWS access key to use for authentication against the AWS API
 * `aws_secret_access_key`: *Required.* The AWS secret access key to use for authentication against the AWS API
 * `aws_region`: *Optional* The region in which to perform lookups (Default: `"eu-west-2"`)
+* `ami_owner_ids": *Optional* A list of AWS IDs that is used to filter the AMI lookups based on the AMI Owner (Default: `["self"]`)
 * `ami_prefix`: *Required.* The AMI name prefix to use when searching for AMIs
 * `version_regex`: *Optional.* The regex used to extract the version from the AMI name (Default: `"(\d{1,3}\.\d{1,3}\.\d{1,3})$"`)
 
