@@ -24,9 +24,6 @@ def set_source_defaults(payload):
 
 
 def validate_source(payload):
-    if "aws_region" not in payload['source'].keys():
-        payload['source'].update({"aws_region": DEFAULT_AWS_REGION})
-
     for param in REQ_PARAMS:
         if param not in payload['source'].keys():
             sys.stderr.write("\nRequired parameter {} not defined\n".format(param))
