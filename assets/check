@@ -113,7 +113,6 @@ def return_versions(payload):
 
 
 if __name__ == "__main__":
-    payload = json.load(sys.stdin)
-    payload = set_source_defaults(payload)
+    payload = set_source_defaults(json.load(sys.stdin))
     validate_source(payload)
     sys.stdout.write(json.dumps(return_versions(payload), indent=2))
