@@ -37,8 +37,6 @@ def validate_source(payload):
         sys.stderr.write("\nami_owner_ids must be a list\n")
         sys.exit(1)
 
-    return payload
-
 
 def write_output_file(ami_id, dir=OUTPUT_DIR, file="ami-id"):
     if not os.path.exists(dir):
@@ -124,5 +122,5 @@ def get_ami_data(payload):
 if __name__ == "__main__":
     payload = json.load(sys.stdin)
     payload = set_source_defaults(payload)
-    payload = validate_source(payload)
+    validate_source(payload)
     sys.stdout.write(json.dumps(get_ami_data(payload), indent=2))

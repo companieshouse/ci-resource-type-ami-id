@@ -42,8 +42,6 @@ def validate_source(payload):
         sys.stderr.write("\nami_owner_ids must be a list\n")
         sys.exit(1)
 
-    return payload
-
 
 def return_versions(payload):
     try:
@@ -117,5 +115,5 @@ def return_versions(payload):
 if __name__ == "__main__":
     payload = json.load(sys.stdin)
     payload = set_source_defaults(payload)
-    payload = validate_source(payload)
+    validate_source(payload)
     sys.stdout.write(json.dumps(return_versions(payload), indent=2))
