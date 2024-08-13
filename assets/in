@@ -6,6 +6,7 @@ import json
 import os
 import sys
 
+DEFAULT_AMI_SUFFIX = ""
 DEFAULT_AWS_REGION = "eu-west-2"
 OUTPUT_DIR = sys.argv[1]
 REQ_PARAMS = [
@@ -14,10 +15,14 @@ REQ_PARAMS = [
     "aws_region",
     "ami_owner_ids",
     "ami_prefix",
+    "ami_suffix"
 ]
 
 
 def set_source_defaults(payload):
+    if "ami_suffix" not in payload["source"].keys():
+        payload["source"].update({"ami_suffix": DEFAULT_AMI_SUFFIX})
+
     if "aws_region" not in payload["source"].keys():
         payload["source"].update({"aws_region": DEFAULT_AWS_REGION})
 
@@ -69,7 +74,7 @@ def get_ami_data(payload):
             Filters=[
                 {
                     "Name": "name",
-                    "Values": [payload["source"]["ami_prefix"] + payload["version"]["version"] + "*"]
+                    "Values": [payload["source"]["ami_prefix"] + payload["version"]["version"] + "*" + payload["source"]["ami_suffix"]]
                 },
             ],
             Owners=payload["source"]["ami_owner_ids"]
