@@ -1,6 +1,6 @@
 # ci-resource-type-ami-id
 
-Provides a Concourse-compatible resource type to retrieve AMI Image versions based on a provided `ami_prefix`, or retrieve an Image Id when provided with both an `ami_prefix` and `version`.
+Provides a Concourse-compatible resource type to retrieve AMI Image versions based on a provided `ami_prefix`, or retrieve an Image Id when provided with both an `ami_prefix` and `version`. An optional `ami_suffix` can also be supplied when an AMI name contains additional characters after the specified version.
 
 ## Installing
 
@@ -9,11 +9,12 @@ Use this resource by adding the following to the `resource_types` section of a p
 ```yaml
 resource_types:
 - name: ci-resource-type-ami-id
-  type: docker-image
+  type: registry-image
   source:
     aws_access_key_id: <aws_access_key_id>
     aws_secret_access_key: <aws_secret_access_key>
-    repository: <docker-registry>/ci-resource-type-ami-id
+    aws_region: <aws_region>
+    repository: ci-resource-type-ami-id
     tag: latest
 ```
 
@@ -24,6 +25,7 @@ resource_types:
 * `aws_region`: *Optional* The region in which to perform lookups (Default: `"eu-west-2"`)
 * `ami_owner_ids`: *Optional* A list of AWS IDs that is used to filter the AMI lookups based on the AMI Owner (Default: `["self"]`)
 * `ami_prefix`: *Required.* The AMI name prefix to use when searching for AMIs
+* `ami_suffix`: *Optional.* The AMI name suffix to use when searching for AMIs, appended to the end of the AMI name
 * `version_regex`: *Optional.* The regex used to extract the version from the AMI name (Default: `"(\d{1,3}\.\d{1,3}\.\d{1,3})$"`)
 
 
