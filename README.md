@@ -25,7 +25,7 @@ resource_types:
 * `aws_region`: *Optional* The region in which to perform lookups (Default: `"eu-west-2"`)
 * `ami_owner_ids`: *Optional* A list of AWS IDs that is used to filter the AMI lookups based on the AMI Owner (Default: `["self"]`)
 * `ami_prefix`: *Required.* The AMI name prefix to use when searching for AMIs
-* `ami_suffix`: *Optional.* The AMI name suffix to use when searching for AMIs, appended to the end of the AMI name
+* `ami_suffix`: *Optional.* The AMI name suffix to append when searching for AMIs (Default: `""`)
 * `version_regex`: *Optional.* The regex used to extract the version from the AMI name (Default: `"(\d{1,3}\.\d{1,3}\.\d{1,3})$"`)
 
 
